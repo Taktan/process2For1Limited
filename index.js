@@ -33,20 +33,20 @@ const process2For1 = (data) => {
 
 const process2For1Limited = (data) => {
   const result = [];
-  const professions = data?.filter(e => e.type == 'Profession')?.sort((a,b) => b.price - a.price) || [];
-  let course = data?.filter(e => e.type == 'Course')?.sort((a,b) => b.price - a.price) || [];
-  for (let index = 0; index < professions.length; index++) {
-    result.push(professions[index]);
-    if(course[index]){
-      course[index].price = 0;
-      result.push(course[index]);
-      delete course[index];
+  data = data.sort((a,b) => b.price - a.price);
+  let abc = 0;
+  for (let element of data) {
+    if(element.type == 'Profession') abc++;
+    else {
+      if(element.price != 0){
+        if(abc > 0){
+          abc--;
+          element.price = 0;
+        } else abc++;
+      }
     }
+    result.push(element);
   }
-
-  course = course.filter(n=>n);
-  if(!!course.length) result.push(...process2For1(course))
-
   return result;
 }
 
@@ -60,7 +60,7 @@ const generatedAndTransformArraysProducts = (limit = 10) => {
   }
 }
 
-// console.log(generatedAndTransformArraysProducts())
+console.log(generatedAndTransformArraysProducts())
 
 const specialCases = () => {
   const onlyProfession = [
